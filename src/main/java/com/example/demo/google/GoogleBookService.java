@@ -3,6 +3,7 @@ package com.example.demo.google;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import tools.jackson.databind.JsonNode;
 
 @Service
 public class GoogleBookService {
@@ -22,6 +23,13 @@ public class GoogleBookService {
                         .build())
                 .retrieve()
                 .body(GoogleBook.class);
+    }
+
+    public JsonNode getBookAsJson(String googleId) {
+        return restClient.get()
+                .uri("/volumes/{id}", googleId)
+                .retrieve()
+                .body(JsonNode.class);
     }
 }
 
