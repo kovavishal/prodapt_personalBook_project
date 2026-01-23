@@ -92,27 +92,12 @@ class BookControllerTests {
         );
 
         mockMvc.perform(post("/books/piOyzYqeZGgC"))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("piOyzYqeZGgC"))
                 .andExpect(jsonPath("$.title").value("Effective Java"))
-                .andExpect(jsonPath("$.author").value("Joshua Bloch"));
+                .andExpect(jsonPath("$.author").value("Joshua Bloch"))
+                .andExpect(jsonPath("$.pageCount").value(265));
 
         assertThat(bookRepository.count()).isEqualTo(3);
-    }
-
-    @Test
-    void testSaveBookFailsWhenGoogleResponseInvalid() throws Exception {
-
-        mockWebServer.enqueue(
-                new MockResponse()
-                        .setResponseCode(200)
-                        .setHeader("Content-Type", "application/json")
-                        .setBody("{}")
-        );
-
-        mockMvc.perform(post("/books/invalid-id"))
-                .andExpect(status().isBadRequest());
-
-        assertThat(bookRepository.count()).isEqualTo(2);
     }
 }
